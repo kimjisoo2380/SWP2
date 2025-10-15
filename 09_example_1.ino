@@ -15,7 +15,7 @@
 #define _EMA_ALPHA 0.5    // EMA weight
 
 // 중위수 필터 관련 설정
-#define N 30               // 최근 N개의 샘플 (3, 10, 30으로 바꿔가며 실험)
+#define N 30               // 최근 N개의 샘플 (3, 10, 30)
 float samples[N];          // 샘플 저장 버퍼
 int sample_index = 0;      // 현재 인덱스
 bool buffer_filled = false;
@@ -48,7 +48,7 @@ void loop() {
   // 초음파 센서 측정
   dist_raw = USS_measure(PIN_TRIG, PIN_ECHO);
 
-  // -------- 중위수 필터: 최근 N개의 샘플 관리 --------
+  // 중위수 필터: 최근 N개의 샘플 관리 
   samples[sample_index] = dist_raw;
   sample_index = (sample_index + 1) % N;
   if (sample_index == 0) buffer_filled = true;
@@ -58,16 +58,16 @@ void loop() {
   else
     dist_median = dist_raw; // 초기엔 버퍼 다 안참
 
-  // -------- EMA 필터 (비교용) --------
+  // EMA 필터
   dist_ema = _EMA_ALPHA * dist_raw + (1 - _EMA_ALPHA) * dist_ema;
 
-  // -------- LED 제어 --------
+  // LED 제어 
   if (dist_median >= _DIST_MIN && dist_median <= _DIST_MAX)
     digitalWrite(PIN_LED, LOW);  // 범위 안 → ON
   else
     digitalWrite(PIN_LED, HIGH); // 범위 밖 → OFF
 
-  // -------- 시리얼 플로터 출력 --------
+  // 시리얼 플로터 출력
   Serial.print("Min:");     Serial.print(_DIST_MIN);
   Serial.print(",raw:");    Serial.print(dist_raw);
   Serial.print(",ema:");    Serial.print(dist_ema);
@@ -78,7 +78,7 @@ void loop() {
   last_sampling_time = millis();
 }
 
-// ----- 초음파 거리 측정 -----
+// 초음파 거리 측정 
 float USS_measure(int TRIG, int ECHO) {
   digitalWrite(TRIG, HIGH);
   delayMicroseconds(PULSE_DURATION);
@@ -86,7 +86,7 @@ float USS_measure(int TRIG, int ECHO) {
   return pulseIn(ECHO, HIGH, TIMEOUT) * SCALE; // mm 단위 반환
 }
 
-// ----- 중위수 계산 함수 -----
+// 중위수 계산 함수
 float getMedian(float arr[], int size) {
   float sorted[size];
   for (int i = 0; i < size; i++) sorted[i] = arr[i];
@@ -108,3 +108,4 @@ float getMedian(float arr[], int size) {
   else
     return sorted[size/2];
 }
+
