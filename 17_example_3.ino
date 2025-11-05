@@ -50,11 +50,11 @@ void loop()
   // Put range Filter code here (_DIST_MIN ~ _DIST_MAX)
   // and turn on LED if the distance is in the range 
   if (dist_raw < _DIST_MIN || dist_raw > _DIST_MAX) {
-     dist_prev = dist_prev;  // If out of range, keep previous value
-     digitalWrite(PIN_LED, HIGH);  // Turn off LED if out of range
+     dist_prev = dist_prev;  
+     digitalWrite(PIN_LED, HIGH);  
   } else {
-     dist_prev = dist_raw;   // If in range, use current value
-     digitalWrite(PIN_LED, LOW);  // Turn on LED if in range
+     dist_prev = dist_raw;   
+     digitalWrite(PIN_LED, LOW);  
   }
   
 
@@ -75,3 +75,4 @@ void loop()
   Serial.print(",_DUTY_MAX:"); Serial.print(_DUTY_MAX);
   Serial.println("");
 }
+
